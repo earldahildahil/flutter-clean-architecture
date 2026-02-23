@@ -25,7 +25,7 @@ No business logic in widgets. No hardcoded colors. No magic numbers.
 Install with the Skills CLI:
 
 ```bash
-npx skills add https://github.com/abdelhakrazi/flutter-bloc-clean-architecture-skill --skill flutter-bloc-development
+npx skills add https://github.com/earldahildahil/flutter-bloc-skill --skill flutter-bloc-skill
 ```
 
 Or grab this repo and add it to your AI coding assistant manually.
