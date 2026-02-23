@@ -47,50 +47,76 @@ User task → What are they building?
 
 ```
 lib/
-├── [feature]/                    # Feature folder (e.g., earnings/, auth/, trips/)
-│   ├── bloc/
-│   │   ├── [feature]_bloc.dart
-│   │   ├── [feature]_event.dart
-│   │   └── [feature]_state.dart
-│   ├── data/
-│   │   ├── datasources/          # Feature-specific API calls
-│   │   ├── repositories/         # Data orchestration
-│   │   └── models/               # Feature-specific DTOs
-│   └── view/
-│       ├── [feature]_page.dart   # Main screen
-│       └── widgets/              # Feature-specific widgets
-├── shared/                       # Cross-feature code
-│   ├── data/
-│   │   ├── datasources/          # Shared API clients (ApiClient, UserDataSource)
-│   │   └── models/               # Shared models (User, ApiResponse)
-│   ├── widgets/                  # Reusable UI components
-│   └── utils/                    # Design system (colors, spacing, typography)
-└── app.dart                      # App entry point
+├── app/                          # App-wide setup
+│   ├── app.dart                  # Root widget
+│   ├── assets.dart               # Asset constants
+│   ├── config.dart               # Environment config
+│   ├── dependency_injection.dart # DI wiring
+│   ├── providers.dart            # BLoC/Cubit providers
+│   └── router.dart               # Route definitions
+├── core/                         # Infrastructure & cross-cutting concerns
+│   ├── dependencies/             # Core DI registrations
+│   ├── errors/                   # Error & exception types
+│   ├── services/                 # Core services (e.g., analytics, connectivity, etc.)
+│   ├── utils/                    # Shared utilities (date, distance, validators, etc.)
+├── design_system/                # Design tokens & reusable UI components
+│   ├── colors.dart               # AppColors
+│   ├── dimensions.dart           # AppSpacing, AppRadius
+│   ├── typography.dart           # AppTypography
+│   ├── styles.dart               # Shared styles
+│   ├── theme.dart                # App theme
+│   ├── widgets/                  # Core reusable widgets (buttons, inputs, etc.)
+├── modules/                      # Feature modules
+│   ├── [feature]/                # e.g., address/, meal/, order/, user/
+│   │   ├── data/
+│   │   │   ├── data_sources/     # Remote/local data sources (API/SDK calls only)
+│   │   │   ├── models/           # DTOs with fromJson/toJson
+│   │   │   └── repositories/     # Repository implementations
+│   │   ├── dependencies/         # Feature-level DI registrations
+│   │   ├── domain/
+│   │   │   ├── entities/         # Domain models (pure Dart)
+│   │   │   ├── repositories/     # Repository interfaces (abstract)
+│   │   │   └── use_cases/        # One use case per file
+│   │   └── presentation/
+│   │       ├── [screen]/         # Screen-level folder (e.g., addresses/, login/)
+│   │       │   ├── cubit/        # [screen]_cubit.dart + [screen]_state.dart
+│   │       │   ├── widgets/   # Screen-specific widgets
+│   │       │   └── [screen]_screen.dart  # Main screen widget
+│   │       └── ...               # Other screens within the feature
+│   └── shared/                   # Cross-module utilities
+│       └── widgets/              # Reusable widgets used by 2+ modules (e.g., error displays, empty states)
+│       └── utils/                # e.g., SnackBarManager, theme extensions, formatters
+├── main_dev.dart                 # Devlopment entry point
+├── main_stg.dart                 # Staging entry point
+└── main_prod.dart                # Production entry point
 ```
+
 
 
 **Direct Imports** — Import each file explicitly where it is used:
 ```dart
-// In a page that uses earnings BLoC and widgets:
-import 'package:app/earnings/bloc/earnings_bloc.dart';
-import 'package:app/earnings/bloc/earnings_event.dart';
-import 'package:app/earnings/bloc/earnings_state.dart';
-import 'package:app/earnings/data/models/earnings_summary.dart';
-import 'package:app/earnings/view/widgets/earnings_summary_card.dart';
-import 'package:app/earnings/view/widgets/daily_earnings_list.dart';
+// In a screen that uses a cubit and components:
+import 'package:dinnerstar/modules/order/presentation/orders/cubit/orders_cubit.dart';
+import 'package:dinnerstar/modules/order/presentation/orders/cubit/orders_state.dart';
+import 'package:dinnerstar/modules/order/domain/entities/order.dart';
+import 'package:dinnerstar/modules/order/presentation/orders/components/orders_empty.dart';
+import 'package:dinnerstar/design_system/colors.dart';
+import 'package:dinnerstar/design_system/dimensions.dart';
 
-// In a repository that uses shared datasource:
-import 'package:app/shared/data/datasources/api_client.dart';
-import 'package:app/shared/data/models/user.dart';
+// In a repository implementation:
+import 'package:dinnerstar/modules/order/data/data_sources/order_remote_data_source.dart';
+import 'package:dinnerstar/modules/order/data/models/order_model.dart';
+import 'package:dinnerstar/modules/order/domain/entities/order.dart';
+import 'package:dinnerstar/modules/order/domain/repositories/order_repository.dart';
 ```
 
 **Key Rules:**
-- All state changes flow through BLoC
-- No direct backend SDK calls outside datasources
+- All state changes flow through Cubit/BLoC
+- No direct backend SDK calls outside data_sources
 - Zero hardcoded values (colors, spacing, typography)
 - Repository pattern for all data access
-- Feature-specific code stays in feature folder
-- Shared code (used by 2+ features) goes in `shared/`
+- Feature-specific code stays in its module folder
+- Shared code (used by 2+ modules) goes in `modules/shared/`
 - **Always use package imports — never relative imports**
 
 ---
@@ -103,20 +129,20 @@ import 'package:app/shared/data/models/user.dart';
 // ✅ CORRECT — package imports
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app/earnings/bloc/earnings_bloc.dart';
-import 'package:app/earnings/bloc/earnings_event.dart';
-import 'package:app/earnings/bloc/earnings_state.dart';
-import 'package:app/earnings/data/models/earnings_summary.dart';
-import 'package:app/shared/data/datasources/api_client.dart';
+import 'package:dinnerstar/modules/order/presentation/orders/cubit/orders_cubit.dart';
+import 'package:dinnerstar/modules/order/presentation/orders/cubit/orders_state.dart';
+import 'package:dinnerstar/modules/order/domain/entities/order.dart';
+import 'package:dinnerstar/modules/order/data/data_sources/order_remote_data_source.dart';
+import 'package:dinnerstar/design_system/colors.dart';
 
 // ❌ WRONG — relative imports
-import '../earnings_bloc.dart';
-import './earnings_event.dart';
-import '../../data/models/earnings_summary.dart';
+import '../orders_cubit.dart';
+import './orders_state.dart';
+import '../../data/models/order_model.dart';
 ```
 
 
-The package name (`app`) must match the `name` field in your project's `pubspec.yaml`.
+The package name (`dinnerstar`) matches the `name` field in `pubspec.yaml`.
 
 ---
 
