@@ -18,7 +18,7 @@ User task → What are they building?
     │   2. Define BLoC (bloc/[feature]_event.dart, _state.dart, _bloc.dart)
     │   3. Create data layer (data/datasources/, data/repositories/, data/models/)
     │   4. Build UI (view/[feature]_page.dart, view/widgets/)
-    │   5. Create barrel files ([feature].dart, data/data.dart, view/view.dart)
+    │   5. Import each file directly using package: imports (no barrel files)
     │
     ├─ New widget only → Presentation layer:
     │   1. Feature-specific: feature/view/widgets/
@@ -55,18 +55,14 @@ lib/
 │   ├── data/
 │   │   ├── datasources/          # Feature-specific API calls
 │   │   ├── repositories/         # Data orchestration
-│   │   ├── models/               # Feature-specific DTOs
-│   │   └── data.dart             # Data layer barrel file
-│   ├── view/
-│   │   ├── [feature]_page.dart   # Main screen
-│   │   ├── widgets/              # Feature-specific widgets
-│   │   └── view.dart             # View barrel file
-│   └── [feature].dart            # Feature barrel file
+│   │   └── models/               # Feature-specific DTOs
+│   └── view/
+│       ├── [feature]_page.dart   # Main screen
+│       └── widgets/              # Feature-specific widgets
 ├── shared/                       # Cross-feature code
 │   ├── data/
 │   │   ├── datasources/          # Shared API clients (ApiClient, UserDataSource)
-│   │   ├── models/               # Shared models (User, ApiResponse)
-│   │   └── data.dart             # Shared data barrel file
+│   │   └── models/               # Shared models (User, ApiResponse)
 │   ├── widgets/                  # Reusable UI components
 │   └── utils/                    # Design system (colors, spacing, typography)
 └── app.dart                      # App entry point
@@ -81,24 +77,19 @@ lib/
 | Models used by ONE feature | `feature/data/models/` | `EarningsSummary` |
 | Models used by MANY features | `shared/data/models/` | `User`, `ApiResponse` |
 
-**Barrel Files** — Single import per layer:
+**Direct Imports** — Import each file explicitly where it is used:
 ```dart
-// Feature barrel: earnings/earnings.dart
-export 'package:app/earnings/bloc/earnings_bloc.dart';
-export 'package:app/earnings/bloc/earnings_event.dart';
-export 'package:app/earnings/bloc/earnings_state.dart';
-export 'package:app/earnings/data/data.dart';
-export 'package:app/earnings/view/view.dart';
+// In a page that uses earnings BLoC and widgets:
+import 'package:app/earnings/bloc/earnings_bloc.dart';
+import 'package:app/earnings/bloc/earnings_event.dart';
+import 'package:app/earnings/bloc/earnings_state.dart';
+import 'package:app/earnings/data/models/earnings_summary.dart';
+import 'package:app/earnings/view/widgets/earnings_summary_card.dart';
+import 'package:app/earnings/view/widgets/daily_earnings_list.dart';
 
-// Data layer barrel: earnings/data/data.dart
-export 'package:app/earnings/data/datasources/earnings_datasource.dart';
-export 'package:app/earnings/data/repositories/earnings_repository.dart';
-export 'package:app/earnings/data/models/earnings_summary.dart';
-
-// Shared data barrel: shared/data/data.dart
-export 'package:app/shared/data/datasources/api_client.dart';
-export 'package:app/shared/data/datasources/user_datasource.dart';
-export 'package:app/shared/data/models/user.dart';
+// In a repository that uses shared datasource:
+import 'package:app/shared/data/datasources/api_client.dart';
+import 'package:app/shared/data/models/user.dart';
 ```
 
 **Key Rules:**
@@ -120,26 +111,18 @@ export 'package:app/shared/data/models/user.dart';
 // ✅ CORRECT — package imports
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app/earnings/earnings.dart';
 import 'package:app/earnings/bloc/earnings_bloc.dart';
+import 'package:app/earnings/bloc/earnings_event.dart';
+import 'package:app/earnings/bloc/earnings_state.dart';
 import 'package:app/earnings/data/models/earnings_summary.dart';
 import 'package:app/shared/data/datasources/api_client.dart';
 
 // ❌ WRONG — relative imports
-import '../earnings.dart';
-import './earnings_bloc.dart';
+import '../earnings_bloc.dart';
+import './earnings_event.dart';
 import '../../data/models/earnings_summary.dart';
 ```
 
-The same rule applies to `export` directives in barrel files:
-
-```dart
-// ✅ CORRECT
-export 'package:app/earnings/bloc/earnings_bloc.dart';
-
-// ❌ WRONG
-export 'bloc/earnings_bloc.dart';
-```
 
 The package name (`app`) must match the `name` field in your project's `pubspec.yaml`.
 

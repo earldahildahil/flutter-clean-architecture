@@ -1,18 +1,10 @@
-// Example: Earnings Feature - Summary Card Widget
-// Path: lib/earnings/view/widgets/earnings_summary_card.dart
-
 import 'package:flutter/material.dart';
 import 'package:app/earnings/data/models/earnings_summary.dart';
+import 'package:app/shared/utils/colors.dart';
+import 'package:app/shared/utils/constants.dart';
+import 'package:app/shared/utils/typography.dart';
 
-// Shared design system imports
-// import 'package:app/shared/utils/colors.dart';
-// import 'package:app/shared/utils/constants.dart';
-// import 'package:app/shared/utils/typography.dart';
-
-/// Feature-specific widget for displaying earnings summary
-/// 
-/// This widget belongs to the earnings feature and is not shared.
-/// Shared widgets go in lib/shared/widgets/
+/// Feature-specific widget for displaying earnings summary.
 class EarningsSummaryCard extends StatelessWidget {
   final EarningsSummary summary;
 

@@ -1,14 +1,9 @@
-// Example: Earnings Feature - Daily Earnings List Widget
-// Path: lib/earnings/view/widgets/daily_earnings_list.dart
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app/earnings/data/models/earnings_summary.dart';
-
-// Shared design system imports
-// import 'package:app/shared/utils/colors.dart';
-// import 'package:app/shared/utils/constants.dart';
-// import 'package:app/shared/utils/typography.dart';
+import 'package:app/shared/utils/colors.dart';
+import 'package:app/shared/utils/constants.dart';
+import 'package:app/shared/utils/typography.dart';
 
 /// Feature-specific widget for displaying daily earnings breakdown
 class DailyEarningsList extends StatelessWidget {

@@ -1,24 +1,17 @@
-// Example: Earnings Feature - Datasource (Supabase)
-// Path: lib/earnings/data/datasources/earnings_datasource.dart
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// Datasource handles all Supabase SDK interactions for earnings
-/// 
-/// IMPORTANT: Only datasources should import Supabase directly.
+/// Only datasources should import Supabase directly.
 /// Repositories call datasources, never Supabase.
 class EarningsDataSource {
   final SupabaseClient _supabase;
 
   EarningsDataSource(this._supabase);
 
-  /// Fetch earnings summary from Supabase
   Future<Map<String, dynamic>> fetchEarningsSummary({
     required String driverId,
     required DateTime startDate,
     required DateTime endDate,
   }) async {
-    // Call Supabase RPC function for aggregated data
     final response = await _supabase.rpc(
       'get_driver_earnings_summary',
       params: {
@@ -31,7 +24,6 @@ class EarningsDataSource {
     return response as Map<String, dynamic>;
   }
 
-  /// Fetch daily breakdown of earnings
   Future<List<Map<String, dynamic>>> fetchDailyEarnings({
     required String driverId,
     required DateTime startDate,

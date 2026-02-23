@@ -1,18 +1,5 @@
-// Example: Shared API Client
-// Path: lib/shared/data/datasources/api_client.dart
-//
-// This is a SHARED datasource used by multiple features.
-// It provides the base HTTP client configuration.
-
 import 'package:dio/dio.dart';
 
-/// Shared API client used across all features
-/// 
-/// WHY SHARED: Every feature needs HTTP calls with the same:
-/// - Base URL
-/// - Auth headers
-/// - Error handling
-/// - Interceptors (logging, retry, token refresh)
 class ApiClient {
   final Dio _dio;
 
@@ -28,7 +15,6 @@ class ApiClient {
         return handler.next(options);
       },
       onError: (error, handler) {
-        // Centralized error handling
         return handler.next(error);
       },
     ));

@@ -1,26 +1,17 @@
-// Example: Earnings Feature - Main Page
-// Path: lib/earnings/view/earnings_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// Feature imports using barrel file
-import 'package:app/earnings/earnings.dart';
+import 'package:app/earnings/bloc/earnings_bloc.dart';
+import 'package:app/earnings/bloc/earnings_event.dart';
+import 'package:app/earnings/bloc/earnings_state.dart';
 import 'package:app/earnings/data/models/earnings_summary.dart';
-
-// Shared design system imports
-// import 'package:app/shared/utils/colors.dart';
-// import 'package:app/shared/utils/constants.dart';
-// import 'package:app/shared/utils/typography.dart';
-// import 'package:app/shared/widgets/gradient_scaffold.dart';
+import 'package:app/earnings/view/widgets/earnings_summary_card.dart';
+import 'package:app/earnings/view/widgets/daily_earnings_list.dart';
+import 'package:app/shared/utils/colors.dart';
+import 'package:app/shared/utils/constants.dart';
+import 'package:app/shared/utils/typography.dart';
+import 'package:app/shared/widgets/gradient_scaffold.dart';
 
 /// Earnings page demonstrating proper BLoC integration and design system usage
-/// 
-/// Key patterns:
-/// - BlocConsumer for listening (errors) + building (UI states)
-/// - All colors from AppColors
-/// - All spacing from AppSpacing
-/// - All typography from AppTypography
 class EarningsPage extends StatelessWidget {
   final String driverId;
 
@@ -31,7 +22,6 @@ class EarningsPage extends StatelessWidget {
     return GradientScaffold(
       body: SafeArea(
         child: BlocConsumer<EarningsBloc, EarningsState>(
-          // Listener handles side effects (SnackBars, navigation)
           listener: (context, state) {
             if (state is EarningsError) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -43,14 +33,10 @@ class EarningsPage extends StatelessWidget {
               );
             }
           },
-          // Builder renders UI based on state
           builder: (context, state) {
             return Column(
               children: [
-                // Header - always visible
                 _buildHeader(context),
-
-                // Content - state dependent
                 Expanded(
                   child: _buildContent(context, state),
                 ),
@@ -83,7 +69,6 @@ class EarningsPage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, EarningsState state) {
-    // Handle each state explicitly
     if (state is EarningsLoading) {
       return const Center(
         child: CircularProgressIndicator(
@@ -113,7 +98,6 @@ class EarningsPage extends StatelessWidget {
       );
     }
 
-    // Initial or error state - show empty state
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -1,12 +1,7 @@
-// Example: Earnings Feature - Repository
-// Path: lib/earnings/data/repositories/earnings_repository.dart
-
 import 'package:app/earnings/data/datasources/earnings_datasource.dart';
 import 'package:app/earnings/data/models/earnings_summary.dart';
 
-/// Repository orchestrates data from datasources and maps to domain entities
-/// 
-/// IMPORTANT: Repositories should NOT import Supabase/Firebase directly.
+/// Repositories should NOT import Supabase/Firebase directly.
 /// They work with datasources and domain entities only.
 class EarningsRepository {
   final EarningsDataSource _dataSource;
@@ -19,7 +14,6 @@ class EarningsRepository {
     required DateTime endDate,
   }) async {
     try {
-      // Fetch data from datasource
       final summaryData = await _dataSource.fetchEarningsSummary(
         driverId: driverId,
         startDate: startDate,
@@ -32,7 +26,6 @@ class EarningsRepository {
         endDate: endDate,
       );
 
-      // Map to domain entities
       final dailyBreakdown = dailyData.map((json) => DailyEarning(
         date: DateTime.parse(json['date'] as String),
         amount: (json['amount'] as num).toDouble(),
@@ -48,7 +41,6 @@ class EarningsRepository {
         dailyBreakdown: dailyBreakdown,
       );
     } catch (e) {
-      // Log error internally, throw user-friendly exception
       throw Exception('Failed to fetch earnings: $e');
     }
   }

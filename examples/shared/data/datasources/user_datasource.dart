@@ -1,21 +1,5 @@
-// Example: Shared User Datasource
-// Path: lib/shared/data/datasources/user_datasource.dart
-//
-// This is a SHARED datasource because user data is needed by:
-// - Auth feature (login, logout)
-// - Profile feature (view/edit profile)
-// - Settings feature (preferences)
-// - Any feature showing user info
-
 import 'package:app/shared/data/datasources/api_client.dart';
 
-/// Shared datasource for user-related API calls
-/// 
-/// WHY SHARED: Multiple features need user data:
-/// - Auth: login, register, logout
-/// - Profile: view/update profile
-/// - Settings: user preferences
-/// - Dashboard: user info display
 class UserDataSource {
   final ApiClient _api;
 

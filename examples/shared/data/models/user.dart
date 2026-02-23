@@ -1,9 +1,5 @@
-// Example: Shared User Model
-// Path: lib/shared/data/models/user.dart
-
 import 'package:equatable/equatable.dart';
 
-/// Shared user model used across multiple features
 class User extends Equatable {
   final String id;
   final String email;

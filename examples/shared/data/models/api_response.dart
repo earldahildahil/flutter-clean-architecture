@@ -1,7 +1,3 @@
-// Example: Shared API Response Model
-// Path: lib/shared/data/models/api_response.dart
-
-/// Generic wrapper for API responses
 class ApiResponse<T> {
   final bool success;
   final T? data;

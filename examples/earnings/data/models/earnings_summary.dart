@@ -1,9 +1,5 @@
-// Example: Earnings Feature - Data Models
-// Path: lib/earnings/data/models/earnings_summary.dart
-
 import 'package:equatable/equatable.dart';
 
-/// Domain entity for earnings data
 class EarningsSummary extends Equatable {
   final double totalEarnings;
   final double tips;

@@ -1,10 +1,6 @@
-// Example: Earnings Feature - State Definitions
-// Path: lib/earnings/bloc/earnings_state.dart
-
 import 'package:equatable/equatable.dart';
 import 'package:app/earnings/data/models/earnings_summary.dart';
 
-/// Base class for all earnings states
 abstract class EarningsState extends Equatable {
   const EarningsState();
 
@@ -12,13 +8,10 @@ abstract class EarningsState extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Initial state before any data is loaded
 class EarningsInitial extends EarningsState {}
 
-/// Loading state - shown during data fetch
 class EarningsLoading extends EarningsState {}
 
-/// Success state with earnings data
 class EarningsLoaded extends EarningsState {
   final EarningsSummary summary;
   final DateTime startDate;
@@ -34,7 +27,6 @@ class EarningsLoaded extends EarningsState {
   List<Object?> get props => [summary, startDate, endDate];
 }
 
-/// Error state with user-friendly message
 class EarningsError extends EarningsState {
   final String message;
 

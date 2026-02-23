@@ -1,37 +1,10 @@
-// Example: Shared Widget - Trip Summary Card
-// Path: lib/shared/widgets/trip_summary_card.dart
-//
-// This demonstrates a design-system-compliant SHARED widget:
-// - Lives in shared/widgets/ because it's used across multiple features
-// - All colors from AppColors
-// - All spacing from AppSpacing
-// - All radius from AppRadius
-// - All typography from AppTypography
-// - No hardcoded values anywhere
-
 import 'package:flutter/material.dart';
+import 'package:app/shared/utils/colors.dart';
+import 'package:app/shared/utils/constants.dart';
+import 'package:app/shared/utils/typography.dart';
 
-// Shared design system imports
-// import 'package:app/shared/utils/colors.dart';
-// import 'package:app/shared/utils/constants.dart';
-// import 'package:app/shared/utils/typography.dart';
-
-/// A reusable card widget for displaying trip information
-/// 
-/// This is a SHARED widget used by multiple features (trips, history, earnings).
-/// Feature-specific widgets should live in their feature's view/widgets/ folder.
-/// 
-/// Usage:
-/// ```dart
-/// TripSummaryCard(
-///   pickupAddress: '123 Main St',
-///   dropoffAddress: '456 Oak Ave',
-///   fare: 24.50,
-///   distance: 5.2,
-///   duration: 18,
-///   onTap: () => navigateToTripDetails(tripId),
-/// )
-/// ```
+/// A reusable card widget for displaying trip information.
+/// Used across multiple features (trips, history, earnings).
 class TripSummaryCard extends StatelessWidget {
   final String pickupAddress;
   final String dropoffAddress;
