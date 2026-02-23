@@ -43,7 +43,7 @@ User task → What are they building?
 
 ## Architecture at a Glance
 
-**Feature-first structure** (official BLoC recommendation):
+**Module-First Structure**:
 
 ```
 lib/
@@ -68,14 +68,6 @@ lib/
 └── app.dart                      # App entry point
 ```
 
-### When to Use Feature vs Shared Data
-
-| Scenario | Location | Example |
-|----------|----------|---------|
-| API endpoints used by ONE feature | `feature/data/` | `EarningsDataSource` → `/api/earnings/...` |
-| API client/service used by MANY features | `shared/data/` | `ApiClient`, `UserDataSource` |
-| Models used by ONE feature | `feature/data/models/` | `EarningsSummary` |
-| Models used by MANY features | `shared/data/models/` | `User`, `ApiResponse` |
 
 **Direct Imports** — Import each file explicitly where it is used:
 ```dart
