@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/flutter-bloc-skill.iml" filepath="$PROJECT_DIR$/.idea/flutter-bloc-skill.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/flutter-clean-architecture.iml" filepath="$PROJECT_DIR$/.idea/flutter-clean-architecture.iml" />
     </modules>
   </component>
 </project>

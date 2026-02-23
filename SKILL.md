@@ -1,10 +1,10 @@
 ---
-name: flutter-bloc-skill
+name: flutter-clean-architecture
 description: Build Flutter features using BLoC state management, clean architecture layers, and the project's design system. Apply when creating screens, widgets, or data integrations.
 license: Complete terms in LICENSE.txt
 ---
 
-# Flutter BLoC Skill
+# Flutter Clean Architecture Skill
 
 This skill enforces BLoC state management, strict layer separation, and mandatory use of design system constants for all Flutter development in this codebase.
 
