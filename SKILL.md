@@ -1,12 +1,13 @@
 ---
 name: flutter-clean-architecture
-description: Build Flutter features using BLoC state management, clean architecture layers, and the project's design system. Apply when creating screens, widgets, or data integrations.
+description: Build This skill enforces BLoC state management, strict layer separation, and mandatory use of design system constants for all Flutter development in this codebase.
 license: Complete terms in LICENSE.txt
 ---
 
 # Flutter Clean Architecture Skill
 
 This skill enforces BLoC state management, strict layer separation, and mandatory use of design system constants for all Flutter development in this codebase.
+
 
 ## Decision Tree: Choosing Your Approach
 
@@ -93,23 +94,6 @@ lib/
 
 
 
-**Direct Imports** — Import each file explicitly where it is used:
-```dart
-// In a screen that uses a cubit and components:
-import 'package:dinnerstar/modules/order/presentation/orders/cubit/orders_cubit.dart';
-import 'package:dinnerstar/modules/order/presentation/orders/cubit/orders_state.dart';
-import 'package:dinnerstar/modules/order/domain/entities/order.dart';
-import 'package:dinnerstar/modules/order/presentation/orders/components/orders_empty.dart';
-import 'package:dinnerstar/design_system/colors.dart';
-import 'package:dinnerstar/design_system/dimensions.dart';
-
-// In a repository implementation:
-import 'package:dinnerstar/modules/order/data/data_sources/order_remote_data_source.dart';
-import 'package:dinnerstar/modules/order/data/models/order_model.dart';
-import 'package:dinnerstar/modules/order/domain/entities/order.dart';
-import 'package:dinnerstar/modules/order/domain/repositories/order_repository.dart';
-```
-
 **Key Rules:**
 - All state changes flow through Cubit/BLoC
 - No direct backend SDK calls outside data_sources
@@ -118,6 +102,88 @@ import 'package:dinnerstar/modules/order/domain/repositories/order_repository.da
 - Feature-specific code stays in its module folder
 - Shared code (used by 2+ modules) goes in `modules/shared/`
 - **Always use package imports — never relative imports**
+
+---
+
+## Core Libraries
+
+These libraries are **always included** in `pubspec.yaml` for every project. Do not remove or replace them.
+
+### Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `cached_network_image` | Efficient network image loading with caching |
+| `cupertino_icons` | iOS-style icons for cross-platform UI |
+| `date_time_format` | Human-readable date/time formatting |
+| `enum_to_string` | Convert enums to/from strings (useful for API serialization) |
+| `equatable` | Value equality for BLoC events, states, and entities |
+| `flutter_bloc` | BLoC/Cubit state management — the primary state management solution |
+| `get_it` | Service locator / dependency injection container |
+| `go_router` | Declarative routing with deep link support |
+| `logger` | Structured, leveled console logging |
+| `package_info_plus` | Access app version, build number, and package name at runtime |
+| `sizer` | Responsive sizing — adapts dimensions to screen size |
+
+### Dev Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `flutter_flavorizr` | Multi-flavor (dev/stg/prod) build configuration |
+| `very_good_analysis` | Strict lint rules enforcing code quality |
+
+
+### Flavor Configuration
+
+Projects use `flutter_flavorizr` with **dev**, **stg**, and **prod** flavors. Entry points must match:
+
+```
+lib/
+├── main_dev.dart     # Development flavor
+├── main_stg.dart     # Staging flavor
+└── main_prod.dart    # Production flavor
+```
+
+Each flavor sets a different `app name`, `applicationId`/`bundleId`, and Firebase config:
+
+```yaml
+# pubspec.yaml (flavorizr section)
+flavorizr:
+  flavors:
+    dev:
+      app:
+        name: "[DEV] AppName"
+      android:
+        applicationId: "com.example.app.dev"
+        firebase:
+          config: ".firebase/dev/google-services.json"
+      ios:
+        bundleId: "com.example.app.dev"
+        firebase:
+          config: ".firebase/dev/GoogleService-Info.plist"
+    stg:
+      app:
+        name: "[STG] AppName"
+      android:
+        applicationId: "com.example.app.stg"
+        firebase:
+          config: ".firebase/stg/google-services.json"
+      ios:
+        bundleId: "com.example.app.stg"
+        firebase:
+          config: ".firebase/stg/GoogleService-Info.plist"
+    prod:
+      app:
+        name: "AppName"
+      android:
+        applicationId: "com.example.app"
+        firebase:
+          config: ".firebase/prod/google-services.json"
+      ios:
+        bundleId: "com.example.app"
+        firebase:
+          config: ".firebase/prod/GoogleService-Info.plist"
+```
 
 ---
 
